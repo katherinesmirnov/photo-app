@@ -1,4 +1,7 @@
-import type { Photo } from '@/app/types/photo';
+"use client";
+
+import Image from "next/image";
+import type { Photo } from "@prisma/client";
 import { getFilename } from './helper'
 
 // Separate component for grid items
@@ -14,9 +17,10 @@ const PhotoGridItem: React.FC<PhotoGridItemProps> = ({ photo, onClick }) => {
       data-photo-id={photo.id}
       onClick={() => onClick()}
     >
-      <img
+      <Image
         src={photo.filePath}
         alt={getFilename(photo.filePath)}
+        fill
         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
       />
       {photo.isFavorite && (

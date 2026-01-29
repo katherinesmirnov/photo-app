@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { Photo } from "@/app/types/photo";
+import type { Photo } from "@prisma/client";
 import PhotoGridItem from "./PhotoGridItem";
 import PhotoModal from "./PhotoModal";
 
