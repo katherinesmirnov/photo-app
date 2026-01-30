@@ -20,14 +20,10 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos }) => {
   };
 
   const handleCloseModal = (): void => {
-    // Capture index to scroll to after closing
-    const id = selectedIndex;
-    // Close modal immediately
     setSelectedIndex(null);
 
-
     requestAnimationFrame(() => requestAnimationFrame(() => {
-      const el = document.querySelector<HTMLElement>(`[data-photo-id="${id}"]`);
+      const el = document.querySelector<HTMLElement>(`[data-photo-id="${photoArray[selectedIndex!].id}"]`);
       if (!el) return;
       const rect = el.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
@@ -57,15 +53,20 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos }) => {
     setSelectedIndex(selectedIndex! + 1);
   };
 
-  const handleFavorite = (idx: number) => {
-    setPhotoArray(photoArray.map((p, i) => {
-      if (i === idx) {
-        return { ...p, isFavorite: !p.isFavorite }
-      } else {
-        // The rest haven't changed
-        return p;
-      }
-    }));
+  const handleFavorite = async (index: number) => {
+    try {
+      const photoId = photoArray[index].id;
+      const response = await fetch(`/api/photos/favorite/${photoId}`, {
+        method: 'PATCH'
+      });
+      if (!response.ok) throw new Error('Network response was not ok');
+
+      const newValue = await response.json();
+      setPhotoArray((prev) => prev.map((p) => p.id === photoId ? { ...p, isFavorite: newValue } : p));
+
+    } catch (err) {
+      console.error('Failed to persist favorite change:', err);
+    }
   }
 
   return (
@@ -98,7 +99,7 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos }) => {
           onClose={handleCloseModal}
           onPrev={handlePrev}
           onNext={handleNext}
-          onFavoritem={() => handleFavorite(selectedIndex)}
+          onFavorite={() => handleFavorite(selectedIndex)}
         />
       )}
     </div>

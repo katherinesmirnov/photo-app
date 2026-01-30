@@ -9,10 +9,10 @@ interface PhotoModalProps {
   onClose: () => void;
   onPrev: () => void;
   onNext: () => void;
-  onFavoritem: () => void;
+  onFavorite: () => void;
 }
 
-const PhotoModal: React.FC<PhotoModalProps> = ({ photo, onClose, onPrev, onNext, onFavoritem }) => {
+const PhotoModal: React.FC<PhotoModalProps> = ({ photo, onClose, onPrev, onNext, onFavorite }) => {
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const handleBackgroundClick = (): void => {
@@ -105,7 +105,7 @@ const PhotoModal: React.FC<PhotoModalProps> = ({ photo, onClose, onPrev, onNext,
             </div>
 
               <button
-                onClick={(e) => { e.stopPropagation(); onFavoritem(); }}
+                onClick={(e) => { e.stopPropagation(); onFavorite(); }}
                 aria-label={photo.isFavorite ? "Unfavorite photo" : "Favorite photo"}
                 className="absolute top-3 right-3 text-gray-700 hover:text-gray-900 transition-colors bg-white/90 rounded-full p-2 z-10 cursor-pointer"
               >
