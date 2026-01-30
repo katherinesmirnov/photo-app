@@ -20,10 +20,11 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos }) => {
   };
 
   const handleCloseModal = (): void => {
+    const id = photoArray[selectedIndex!].id;
     setSelectedIndex(null);
 
     requestAnimationFrame(() => requestAnimationFrame(() => {
-      const el = document.querySelector<HTMLElement>(`[data-photo-id="${photoArray[selectedIndex!].id}"]`);
+      const el = document.querySelector<HTMLElement>(`[data-photo-id="${id}"]`);
       if (!el) return;
       const rect = el.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
@@ -59,9 +60,10 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos }) => {
       const response = await fetch(`/api/photos/favorite/${photoId}`, {
         method: 'PATCH'
       });
-      if (!response.ok) throw new Error('Network response was not ok');
 
       const newValue = await response.json();
+      if (!response.ok) throw new Error(newValue.error);
+
       setPhotoArray((prev) => prev.map((p) => p.id === photoId ? { ...p, isFavorite: newValue } : p));
 
     } catch (err) {
