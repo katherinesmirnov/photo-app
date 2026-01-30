@@ -1,5 +1,6 @@
+import Image from "next/image";
 import { getFilename } from './helper'
-import type { Photo } from '@/app/types/photo';
+import type { Photo } from "@prisma/client";
 import { useEffect, useRef } from 'react';
 
 // Separate component for modal
@@ -8,10 +9,10 @@ interface PhotoModalProps {
   onClose: () => void;
   onPrev: () => void;
   onNext: () => void;
-  onFavoritem: () => void;
+  onFavorite: () => void;
 }
 
-const PhotoModal: React.FC<PhotoModalProps> = ({ photo, onClose, onPrev, onNext, onFavoritem }) => {
+const PhotoModal: React.FC<PhotoModalProps> = ({ photo, onClose, onPrev, onNext, onFavorite }) => {
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const handleBackgroundClick = (): void => {
@@ -84,9 +85,10 @@ const PhotoModal: React.FC<PhotoModalProps> = ({ photo, onClose, onPrev, onNext,
 
       <div className="relative max-w-5xl w-full mx-auto h-screen overflow-auto hide-scrollbar">
         <div style={{ position: 'fixed', inset: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
-          <img
+          <Image
             src={photo.filePath}
             alt={getFilename(photo.filePath)}
+            fill
             className="rounded-lg"
             style={{ maxWidth: 'calc(100vw - 20px)', maxHeight: 'calc(100vh - 20px)', objectFit: 'contain', display: 'block'}}
           />
@@ -103,7 +105,7 @@ const PhotoModal: React.FC<PhotoModalProps> = ({ photo, onClose, onPrev, onNext,
             </div>
 
               <button
-                onClick={(e) => { e.stopPropagation(); onFavoritem(); }}
+                onClick={(e) => { e.stopPropagation(); onFavorite(); }}
                 aria-label={photo.isFavorite ? "Unfavorite photo" : "Favorite photo"}
                 className="absolute top-3 right-3 text-gray-700 hover:text-gray-900 transition-colors bg-white/90 rounded-full p-2 z-10 cursor-pointer"
               >

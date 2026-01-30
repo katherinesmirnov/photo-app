@@ -1,0 +1,27 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Photo {
+  id         Int      @id @default(autoincrement())
+  filePath   String   @unique
+  takenDate  DateTime
+  isFavorite Boolean  @default(false)
+  section     Section?  @relation(fields: [sectionId], references: [id])
+  sectionId   Int?
+}
+
+model Section {
+  id          Int     @id @default(autoincrement())
+  name        String
+  totalItems  Int
+  photos      Photo[]
+}
