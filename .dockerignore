@@ -1,0 +1,15 @@
+.next
+node_modules
+npm-debug.log
+.env
+.env.*
+.git
+.github
+.vscode
+dist
+logs
+*.log
+Dockerfile
+docker-compose.yml
+/.idea
+*.tgz
