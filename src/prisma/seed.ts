@@ -1,4 +1,3 @@
-import "dotenv/config";
 import prisma from '@/lib/prisma';
 
 
@@ -17,13 +16,13 @@ async function main() {
   const photo = await prisma.photo.createMany({
     data: [
       {
-        filePath: "../images/test/photo1.jpg",
+        filePath: "/images/photo1.jpg",
         takenDate: new Date(),
         isFavorite: true,
         sectionId: 1
       },
       {
-        filePath: "../images/test/photo2.jpg",
+        filePath: "/images/photo2.jpg",
         takenDate: new Date(),
         isFavorite: false
       }

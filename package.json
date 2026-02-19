@@ -3,10 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "db:deploy": "npx prisma migrate deploy && npx prisma generate && prisma db seed",
+    "db:view": "npx prisma studio --config ./prisma.config.ts",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/adapter-better-sqlite3": "^7.3.0",
