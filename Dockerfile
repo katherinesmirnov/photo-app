@@ -1,43 +1,41 @@
-FROM node:20-alpine AS base
+FROM node:20-bookworm-slim AS base
+WORKDIR /app
 
-# Install dependencies only when needed
 FROM base AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
-WORKDIR /app
-
-# Dependencies
-FROM base AS builder
-WORKDIR /app
-
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends python3 make g++ \
+  && rm -rf /var/lib/apt/lists/*
 COPY package*.json ./
-RUN npm --no-fund --no-update-notifier ci
+RUN npm ci --omit=dev
 
-# build 
-COPY public/ ./public
-COPY src/ ./src
-COPY next.config.ts ./
-RUN NEXT_TELEMETRY_DISABLED=1 npm run db:deploy && npm run build
+FROM base AS builder
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run build
 
-# Final image
-FROM base AS app
-
-RUN apk add --no-cache tini
-
+FROM node:20-bookworm-slim AS runner
 WORKDIR /app
-
-COPY --from=builder --chown=node /app/.next/standalone ./
-COPY --from=builder --chown=node /app/.next/static ./.next/static
-
-COPY start.sh /usr/local/bin
-
-ENV HOSTNAME=0.0.0.0
-ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
 
-EXPOSE 3000
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends tini \
+  && ln -sf /usr/bin/tini /sbin/tini \
+  && rm -rf /var/lib/apt/lists/*
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
+COPY --from=builder /app/start.sh ./start.sh
+COPY --from=prod-deps /app/node_modules ./node_modules
+
+RUN chmod +x ./start.sh \
+  && chown -R node:node /app
 
 USER node
-
-ENTRYPOINT [ "start.sh" ]
+EXPOSE 3000
+CMD ["./start.sh"]

@@ -20,5 +20,5 @@ Update these documents if required by high level changes.
 
 
 ### Reference Documentation
-- **Next.js** https://nextjs.org/docs. Reference version 16.1.6, using the app router.
-- **Database** https://www.prisma.io/docs/orm. Reference the SQLite and/or next.js documentation.
+- **Next.js** https://nextjs.org/docs. Reference version 16.1.3, using the app router.
+- **Database** https://www.prisma.io/docs/orm. Reference version 7.4.1, the SQLite and/or next.js documentation.
