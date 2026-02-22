@@ -6,7 +6,7 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends python3 make g++ \
   && rm -rf /var/lib/apt/lists/*
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm ci 
 
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
@@ -31,7 +31,6 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
 COPY --from=builder /app/start.sh ./start.sh
-COPY --from=prod-deps /app/node_modules ./node_modules
 
 RUN chmod +x ./start.sh \
   && chown -R node:node /app

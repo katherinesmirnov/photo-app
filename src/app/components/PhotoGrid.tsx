@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import type { Photo } from  '@/generated/prisma/client';
-import PhotoGridItem from "./PhotoGridItem";
-import PhotoModal from "./PhotoModal";
+import { useState } from 'react';
+import type { Photo } from '@/generated/prisma/client';
+import PhotoGridItem from './PhotoGridItem';
+import PhotoModal from './PhotoModal';
 
 export interface PhotoGridProps {
   photos: Photo[];
@@ -20,38 +20,50 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos }) => {
   };
 
   const handleCloseModal = (): void => {
-    const id = photoArray[selectedIndex!].id;
-    setSelectedIndex(null);
+    if (selectedIndex === null) return;
 
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      const el = document.querySelector<HTMLElement>(`[data-photo-id="${id}"]`);
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      const elementMiddle = window.scrollY + rect.top + rect.height / 2;
-      let target = elementMiddle - viewportHeight / 2;
-      // Clamp within document bounds
-      const max = Math.max(document.body.scrollHeight - viewportHeight, 0);
-      if (target < 0) target = 0;
-      if (target > max) target = max;
-      window.scrollTo({ top: target, behavior: 'smooth' });
-    }));
+    const selectedPhoto = photoArray[selectedIndex];
+    setSelectedIndex(null);
+    if (!selectedPhoto) return;
+
+    const id = selectedPhoto.id;
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        const el = document.querySelector<HTMLElement>(`[data-photo-id="${id}"]`);
+        if (!el) return;
+
+        const rect = el.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        const elementMiddle = window.scrollY + rect.top + rect.height / 2;
+        let target = elementMiddle - viewportHeight / 2;
+
+        // Clamp within document bounds
+        const max = Math.max(document.body.scrollHeight - viewportHeight, 0);
+        if (target < 0) target = 0;
+        if (target > max) target = max;
+        window.scrollTo({ top: target, behavior: 'smooth' });
+      })
+    );
   };
 
   const handlePrev = (): void => {
+    if (selectedIndex === null) return;
     if (selectedIndex === 0) {
       handleCloseModal();
       return;
     }
-    setSelectedIndex(selectedIndex! - 1);
+
+    setSelectedIndex(selectedIndex - 1);
   };
 
   const handleNext = (): void => {
+    if (selectedIndex === null) return;
     if (selectedIndex === photoArray.length - 1) {
       handleCloseModal();
       return;
     }
-    setSelectedIndex(selectedIndex! + 1);
+
+    setSelectedIndex(selectedIndex + 1);
   };
 
   const handleFavorite = async (index: number) => {
@@ -69,19 +81,17 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos }) => {
     } catch (err) {
       console.error('Failed to persist favorite change:', err);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Header */}
       <div className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <h1 className="text-2xl font-bold text-gray-900">My Photos</h1>
-          <p className="text-sm text-gray-600 mt-1">{photos.length} photos</p>
+          <p className="text-sm text-gray-600 mt-1">{photoArray.length} photos</p>
         </div>
       </div>
 
-      {/* Photo Grid */}
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {photoArray.map((photo: Photo, idx: number) => (
@@ -94,7 +104,6 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos }) => {
         </div>
       </div>
 
-      {/* Photo Detail Modal */}
       {selectedIndex !== null && (
         <PhotoModal
           photo={photoArray[selectedIndex]}

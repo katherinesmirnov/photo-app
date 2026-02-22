@@ -1,49 +1,45 @@
 import prisma from '../src/lib/prisma';
 
-
 async function main() {
-  // create section
   const section = await prisma.section.create({
     data: {
-      name: "test Album",
-      totalItems: 1
-    }
-  })
-  console.log('Created section:', section)
+      name: 'test Album',
+      totalItems: 2,
+    },
+  });
+  console.log('Created section:', section);
 
-
-  // Create a new user with a post
   const photo = await prisma.photo.createMany({
     data: [
       {
-        filePath: "/images/photo1.jpg",
+        filePath: '/images/photo1.JPG',
         takenDate: new Date(),
         isFavorite: true,
-        sectionId: 1
+        sectionId: section.id,
       },
       {
-        filePath: "/images/photo2.jpg",
+        filePath: '/images/photo2.JPG',
         takenDate: new Date(),
-        isFavorite: false
-      }
-    ]
-  })
-  console.log('Created photo:', photo)
-  // Fetch all users with their posts
+        isFavorite: false,
+      },
+    ],
+  });
+  console.log('Created photo:', photo);
+
   const allPhotos = await prisma.photo.findMany({
     include: {
       section: true,
     },
-  })
-  console.log('All photos:', JSON.stringify(allPhotos, null, 2))
+  });
+  console.log('All photos:', JSON.stringify(allPhotos, null, 2));
 }
 
 main()
   .then(async () => {
-    await prisma.$disconnect()
+    await prisma.$disconnect();
   })
   .catch(async (e) => {
-    console.error(e)
-    await prisma.$disconnect()
-    process.exit(1)
-  })
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
