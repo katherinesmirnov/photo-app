@@ -11,4 +11,4 @@ https://www.prisma.io/docs/getting-started/prisma-orm/quickstart/sqlite#8-write-
 
 https://www.prisma.io/docs/guides/nextjs#31-update-your-data-optional
 
-npx prisma studio --config ./prisma.config.ts
+docker build --no-cache -t nextjs-image . && docker run --rm -e DATABASE_URL=file:./data/dev.db -p 3000:3000 nextjs-image

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { getFilename } from './helper'
-import type { Photo } from "@prisma/client";
+import type { Photo } from "@/generated/prisma/client";
 import { useEffect, useRef } from 'react';
 
 // Separate component for modal

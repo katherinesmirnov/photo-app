@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import type { Photo } from "@prisma/client";
+import type { Photo } from "@/generated/prisma/client";
 import { getFilename } from './helper'
 
 // Separate component for grid items
