@@ -4,10 +4,11 @@ import { ErrorMessages } from '@/lib/errors';
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  try {
-    const id = Number.parseInt(params.id, 10);
+  try{
+    const { id: idParam } = await params;
+    const id = Number.parseInt(idParam, 10);
     if (!Number.isInteger(id) || id <= 0) {
       return NextResponse.json({ error: ErrorMessages.INVALID_ID }, { status: 400 });
     }

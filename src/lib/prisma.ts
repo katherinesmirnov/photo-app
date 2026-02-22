@@ -5,7 +5,7 @@ const globalForPrisma = global as unknown as {
     prisma: PrismaClient
 }
 
-const connectionString = process.env.DATABASE_URL ?? 'file:./dev.db';
+const connectionString = process.env.DATABASE_URL ?? 'file:./data/dev.db';
 
 const adapter = new PrismaBetterSqlite3({ url: connectionString });
 const prisma = new PrismaClient({ adapter });
