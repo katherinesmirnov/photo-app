@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import type { Photo } from "@/generated/prisma/client";
-import { getFilename } from './helper'
+import { getFilePath } from './helper'
 
 // Separate component for grid items
 interface PhotoGridItemProps {
@@ -18,8 +18,8 @@ const PhotoGridItem: React.FC<PhotoGridItemProps> = ({ photo, onClick }) => {
       onClick={() => onClick()}
     >
       <Image
-        src={photo.filePath}
-        alt={getFilename(photo.filePath)}
+        src={getFilePath(photo.filePath)}
+        alt={getFilePath(photo.filePath, false)}
         fill
         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
       />

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { getFilename } from './helper'
+import { getFilePath } from './helper'
 import type { Photo } from "@/generated/prisma/client";
 import { useEffect, useRef } from 'react';
 
@@ -86,8 +86,8 @@ const PhotoModal: React.FC<PhotoModalProps> = ({ photo, onClose, onPrev, onNext,
       <div className="relative max-w-5xl w-full mx-auto h-screen overflow-auto hide-scrollbar">
         <div style={{ position: 'fixed', inset: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
           <Image
-            src={photo.filePath}
-            alt={getFilename(photo.filePath)}
+            src={getFilePath(photo.filePath)}
+            alt={getFilePath(photo.filePath, false)}
             fill
             className="rounded-lg"
             style={{ maxWidth: 'calc(100vw - 20px)', maxHeight: 'calc(100vh - 20px)', objectFit: 'contain', display: 'block'}}
@@ -97,7 +97,7 @@ const PhotoModal: React.FC<PhotoModalProps> = ({ photo, onClose, onPrev, onNext,
         {/* Info box */}
         <div style={{ position: 'relative', zIndex: 100, paddingTop: '100vh' }}>
           <div className="mt-4 bg-white rounded-lg p-4 mx-4 shadow-top relative">
-            <h2 className="text-lg font-semibold text-gray-900">{getFilename(photo.filePath)}</h2>
+            <h2 className="text-lg font-semibold text-gray-900">{getFilePath(photo.filePath, false)}</h2>
             <div className="mt-2 grid grid-cols-2 gap-2 text-sm text-gray-600">
               <div>
                 <span className="font-medium">Date:</span> {takenDate}
