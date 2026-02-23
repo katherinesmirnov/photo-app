@@ -1,4 +1,4 @@
-import PhotoGrid from '@/app/components/PhotoGrid';
+import PhotoGrid from '@/components/PhotoGrid';
 import prisma from '@/lib/prisma'
 export const dynamic = "force-dynamic";
 
