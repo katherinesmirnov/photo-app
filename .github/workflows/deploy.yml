@@ -16,6 +16,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Build and restart
+        env:
+          HOST_DATA_DIR: ${{ secrets.HOST_DATA_DIR }}
+          HOST_UPLOADS_DIR: ${{ secrets.HOST_UPLOADS_DIR }}
         run: docker compose up -d --build --remove-orphans
 
       - name: Prune old images
