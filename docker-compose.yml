@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   app:
     build: .
@@ -6,5 +8,6 @@ services:
       - "3000:3000"
     volumes:
       - ./data:/app/data
+      - ./uploads:/app/storage/uploads
     environment:
-      DATABASE_URL: file:./data/prod.db
+      DATABASE_URL: "file:./data/prod.db"

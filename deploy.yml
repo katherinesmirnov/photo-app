@@ -1,0 +1,21 @@
+name: Deploy Photo App
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: photo-app-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, photo-app]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and restart
+        run: docker compose up -d --build --remove-orphans
+
+      - name: Prune old images
+        run: docker image prune -f
