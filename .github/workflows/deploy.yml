@@ -21,10 +21,7 @@ jobs:
         env:
           HOST_DATA_DIR: ${{ secrets.HOST_DATA_DIR }}
           HOST_UPLOADS_DIR: ${{ secrets.HOST_UPLOADS_DIR }}
-        run: |
-          : "${HOST_DATA_DIR:?HOST_DATA_DIR secret is missing or empty}"
-          : "${HOST_UPLOADS_DIR:?HOST_UPLOADS_DIR secret is missing or empty}"
-          docker compose up -d --build --remove-orphans
+        run: docker compose up -d --build --remove-orphans
 
       - name: Prune old images
         run: docker image prune -f
