@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 concurrency:
-  group: photo-app-deploy
+  group: deploy-main
   cancel-in-progress: true
 
 jobs:
