@@ -12,13 +12,13 @@ async function main() {
   const photo = await prisma.photo.createMany({
     data: [
       {
-        filePath: '/images/photo1.JPG',
+        filePath: 'photo1.JPG',
         takenDate: new Date(),
         isFavorite: true,
         sectionId: section.id,
       },
       {
-        filePath: '/images/photo2.JPG',
+        filePath: 'photo2.JPG',
         takenDate: new Date(),
         isFavorite: false,
       },
